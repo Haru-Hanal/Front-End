@@ -65,7 +65,6 @@ class MenuPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // 상단 곡선
               Positioned(
                 left: 445.83,
                 top: -1435,
@@ -84,7 +83,6 @@ class MenuPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // 상단 곡선
               Positioned(
                 left: 673.83,
                 top: -1422,
@@ -127,11 +125,11 @@ class MenuPage extends StatelessWidget {
 
               // logo
               Positioned(
-                left: containerWidth * 0.2,
-                top: 35,
+                left: containerWidth * 0.05,
+                top: 16,
                 child: Container(
-                  width: 222 * 1.1,
-                  height: 49 * 1.1,
+                  width: 222 * 1.6,
+                  height: 49 * 1.6,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/logo.png"),

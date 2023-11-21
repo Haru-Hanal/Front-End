@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'bottom.dart' as bottom;
+import 'apiRequest.dart' as api;
+import 'sample_screen.dart' as sample;
 
 class subscribePage extends StatelessWidget {
   //생성자 부분 쪽에서 서버에 데이터를 요청한다. 이때 text 카테고리에 대한 정보를 받아온다? 이렇게 작성하면 될듯.
@@ -13,7 +15,6 @@ class subscribePage extends StatelessWidget {
 
     return Column(
       children: [
-        // 배경
         Container(
           width: containerWidth,
           height: containerHeight,
@@ -38,7 +39,6 @@ class subscribePage extends StatelessWidget {
                   ),
                 ),
               ),
-              // 상단 곡선
               Positioned(
                 left: 445.83,
                 top: -1435,
@@ -57,7 +57,6 @@ class subscribePage extends StatelessWidget {
                   ),
                 ),
               ),
-              // 상단 곡선
               Positioned(
                 left: 673.83,
                 top: -1422,
@@ -76,8 +75,6 @@ class subscribePage extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // 상단 곡선
               Positioned(
                 left: 820.83,
                 top: -1418,
@@ -96,7 +93,6 @@ class subscribePage extends StatelessWidget {
                   ),
                 ),
               ),
-              //입력창
               Positioned(
                 left: 18,
                 top: 225,
@@ -107,7 +103,7 @@ class subscribePage extends StatelessWidget {
                     TextSpan(
                       children: [
                         TextSpan(
-                          text: 'One pill a day',
+                          text: '하루 한알',
                           style: TextStyle(
                             color: Color(0xFF151921),
                             fontSize: 18,
@@ -129,13 +125,12 @@ class subscribePage extends StatelessWidget {
                   ),
                 ),
               ),
-              // logo
               Positioned(
-                left: containerWidth * 0.2,
-                top: 35,
+                left: containerWidth * 0.05,
+                top: 16,
                 child: Container(
-                  width: 222 * 1.1,
-                  height: 49 * 1.1,
+                  width: 222 * 1.6,
+                  height: 49 * 1.6,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/logo.png"),
@@ -397,16 +392,24 @@ class subscribePage extends StatelessWidget {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                // 구독 취소 로직을 추가
                                 bottom.subcribe = !bottom.subcribe;
-                                Navigator.of(context).pop(); // 알림창 닫기
-                                Navigator.of(context).pop();
+                                if (bottom.subcribe) {
+                                  sample.subscribe = 1;
+                                } else {
+                                  sample.subscribe = 0;
+                                }
+
+                                api.updateUserSubscribe(
+                                    sample.userid, sample.subscribe);
+                                //Navigator.of(context).pop();
+                                Navigator.popUntil(
+                                    context, ModalRoute.withName('/'));
                               },
                               child: Text('확인'),
                             ),
                             TextButton(
                               onPressed: () {
-                                Navigator.of(context).pop(); // 알림창 닫기
+                                Navigator.of(context).pop();
                               },
                               child: Text('취소'),
                             ),
@@ -436,7 +439,6 @@ class subscribePage extends StatelessWidget {
                       ),
                     ),
                   )),
-              // 하단 버튼
               Positioned(left: 0, top: 645, child: bottom.bottomPage()),
             ],
           ),

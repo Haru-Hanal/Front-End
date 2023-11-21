@@ -1,17 +1,58 @@
 import 'package:flutter/material.dart';
-import 'layoutCall.dart';
-
+import 'category.dart' as category;
 import 'search_input.dart' as search;
-import 'menu.dart' as menu;
+import 'layoutCall.dart';
+import 'healthChecking/healthCheck.dart' as check;
 import 'bottom.dart' as bottom;
+import 'review.dart' as review;
+import 'Nutrition.dart' as nut;
 
-class CategoryPage extends StatelessWidget {
+class FigmaToCodeApp extends StatelessWidget {
+  const FigmaToCodeApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SafeArea(
+        child: ListView(children: [
+          Medicines(),
+        ]),
+      ),
+    );
+  }
+}
+
+class Medicines extends StatelessWidget {
+  void navigateToCategoryPage(BuildContext context) {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 500),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          var begin = Offset(1.0, 0.0);
+          var end = Offset(0.0, 0.0);
+          var curve = Curves.ease;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            category.CategoryPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    final double containerHeight = screenHeight;
+    final double containerHeight = screenHeight * 0.96;
     final double containerWidth = screenWidth;
     return Column(
       children: [
@@ -27,6 +68,7 @@ class CategoryPage extends StatelessWidget {
           child: Stack(
             children: [
               // 입력창
+              search.SearchInput(),
               Positioned(
                 left: 0,
                 top: 0,
@@ -79,8 +121,7 @@ class CategoryPage extends StatelessWidget {
                   ),
                 ),
               ),
-
-              //상단 곡선
+              //곡선
               Positioned(
                 left: 820.83,
                 top: -1418,
@@ -99,15 +140,384 @@ class CategoryPage extends StatelessWidget {
                   ),
                 ),
               ),
-              search.HgihSearch(),
+              //자가진단 버튼
+              Positioned(
+                  left: containerWidth * 0.06,
+                  top: 100,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  check.checkPage(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            var begin = Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 93 * 1.1,
+                      height: 105 * 1.1,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 2,
+                            strokeAlign: BorderSide.strokeAlignCenter,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        shadows: [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Container(
+                              width: 93 * 1.1,
+                              height: 105 * 1.1,
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFF5F5F5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(19.52),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 10.25,
+                            top: 12,
+                            child: SizedBox(
+                              width: 71.72,
+                              height: 17.07,
+                              child: Text(
+                                '건강상태 체크',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11.39,
+                                  fontFamily: 'Lato',
+                                  fontWeight: FontWeight.w800,
+                                  height: 0.15,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: -2,
+                            top: 1,
+                            child: Container(
+                              width: 112,
+                              height: 113,
+                              decoration: ShapeDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage("assets/selfTest.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+              //상단 곡선
+
+              //상단 영양제 버튼
+              Positioned(
+                  left: containerWidth * 0.38,
+                  top: 100,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  nut.nutritionPage(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            var begin = Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 92 * 1.1,
+                      height: 105 * 1.1,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 2,
+                            strokeAlign: BorderSide.strokeAlignCenter,
+                            color: Color(0xFF0BAB7C),
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        shadows: [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Container(
+                              width: 92 * 1.1,
+                              height: 105 * 1.1,
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFF5F5F5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(19.52),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 10.92,
+                            top: 12,
+                            child: SizedBox(
+                              width: 70.95,
+                              height: 17.07,
+                              child: Text(
+                                '추천 영양제',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11.39,
+                                  fontFamily: 'Lato',
+                                  fontWeight: FontWeight.w800,
+                                  height: 0.15,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: -15,
+                            top: -10,
+                            child: Container(
+                              width: 136,
+                              height: 136,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage("assets/medicine.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+              // 상단 후기 버튼
+              Positioned(
+                  left: containerWidth * 0.7,
+                  top: 100,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  review.reviewPage(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            var begin = Offset(1.0, 0.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
+
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 93 * 1.1,
+                      height: 105 * 1.1,
+                      clipBehavior: Clip.antiAlias,
+                      decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(
+                            width: 2,
+                            strokeAlign: BorderSide.strokeAlignCenter,
+                            color: Color(0xFF9400D3),
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        shadows: [
+                          BoxShadow(
+                            color: Color(0x3F000000),
+                            blurRadius: 4,
+                            offset: Offset(0, 4),
+                            spreadRadius: 0,
+                          )
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            left: 0,
+                            top: 0,
+                            child: Container(
+                              width: 93 * 1.1,
+                              height: 105 * 1.1,
+                              decoration: ShapeDecoration(
+                                color: Color(0xFFF5F5F5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(19.52),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 10.25,
+                            top: 12,
+                            child: SizedBox(
+                              width: 71.72,
+                              height: 17.07,
+                              child: Text(
+                                '후기',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 11.39,
+                                  fontFamily: 'Lato',
+                                  fontWeight: FontWeight.w800,
+                                  height: 0.15,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            left: 3,
+                            top: 11,
+                            child: Container(
+                              width: 87,
+                              height: 94,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage("assets/review.png"),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+
               Positioned(
                 left: 24,
-                top: 150,
+                top: 320,
                 child: Container(
                   width: containerWidth * 0.9,
                   height: 308.23,
                   child: Stack(
                     children: [
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Container(
+                          width: containerWidth * 0.9,
+                          height: 50.14,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: 0,
+                                top: 10,
+                                child: Text(
+                                  'Categories',
+                                  style: TextStyle(
+                                    color: Color(0xFF151921),
+                                    fontSize: 16.27,
+                                    fontFamily: 'Be Vietnam Pro',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0.07,
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: containerWidth * 0.73,
+                                top: 3,
+                                child: SizedBox(
+                                  width: 60,
+                                  height: 23,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      navigateToCategoryPage(context);
+                                    },
+                                    child: Text(
+                                      'SEE All',
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        color: Color(0xFF151921),
+                                        fontSize: 11.39,
+                                        fontFamily: 'Be Vietnam Pro',
+                                        fontWeight: FontWeight.w700,
+                                        height: 0.15,
+                                        letterSpacing: 0.10,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       Positioned(
                         left: -0,
                         top: 33.34,
@@ -531,8 +941,7 @@ class CategoryPage extends StatelessWidget {
                   ),
                 ),
               ),
-              //하단 버튼
-              Positioned(left: 0, top: 645, child: bottom.bottomPage()),
+              Positioned(left: 0, top: 620, child: bottom.bottomPage()),
             ],
           ),
         ),

@@ -1,9 +1,58 @@
 import 'package:flutter/material.dart';
 import '../bottom.dart' as bottom;
+import '../sample_screen.dart' as sample;
+import '../apiRequest.dart' as api;
 
 class QAPage extends StatefulWidget {
   @override
   _QAPage createState() => _QAPage();
+}
+
+List<String> testQ = [];
+List<String> testA = [];
+List<String> testName = [
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+  '고길동',
+  '허준김',
+];
+Future<void> submitQuestion(String titleInput, String contentInput) async {
+  int test = await api.sendQuestion(sample.userid, titleInput, contentInput);
+  // test 변수를 사용하여 필요한 작업 수행
+}
+
+Future<void> getQuestions() async {
+  List<List<String>> test = await api.getUserQuestions(sample.userid);
+  print('확인 변수${test}');
+  testQ = test[0];
+  testA = test[1];
+  // test 변수를 사용하여 필요한 작업 수행
 }
 
 class _QAPage extends State<QAPage> {
@@ -15,6 +64,47 @@ class _QAPage extends State<QAPage> {
 
     final double containerHeight = screenHeight;
     final double containerWidth = screenWidth;
+    getQuestions();
+    void refreshPage() {
+      setState(() {
+        // 상태를 업데이트하여 QAPage를 새로고침
+      });
+    }
+
+    // 질문하기 버튼 클릭 이벤트 핸들러
+    void onQuestionButtonPressed(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          String inputText = '';
+
+          return AlertDialog(
+            title: Text('질문하기'),
+            content: TextField(
+              onChanged: (value) {
+                inputText = value;
+              },
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  // 입력된 질문을 리스트에 저장
+                  testQ.add(inputText);
+                  testA.add(' ');
+                  testName.add(' ');
+                  submitQuestion(inputText, ' ');
+                  // 여기서 원하는 추가적인 작업을 수행할 수 있습니다.
+
+                  Navigator.of(context).pop(); // 다이얼로그 닫기
+                  refreshPage();
+                },
+                child: Text('저장'),
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return Column(
       children: [
@@ -105,11 +195,11 @@ class _QAPage extends State<QAPage> {
 
               // logo
               Positioned(
-                left: containerWidth * 0.2,
-                top: 35,
+                left: containerWidth * 0.05,
+                top: 16,
                 child: Container(
-                  width: 222 * 1.1,
-                  height: 49 * 1.1,
+                  width: 222 * 1.6,
+                  height: 49 * 1.6,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/logo.png"),
@@ -232,7 +322,7 @@ class _QAPage extends State<QAPage> {
 
               Positioned(
                   top: 230,
-                  left: 175,
+                  left: 160,
                   child: Container(
                     width: 62,
                     height: 62,
@@ -243,23 +333,126 @@ class _QAPage extends State<QAPage> {
                     )),
                   )),
               Positioned(
-                  top: 230,
-                  left: 175,
+                  top: 255,
+                  left: 215,
                   child: Container(
-                    width: 62,
-                    height: 62,
+                    width: 38,
+                    height: 38,
                     decoration: BoxDecoration(
                         image: DecorationImage(
                       image: AssetImage('assets/profileImage/qna2.png'),
                       fit: BoxFit.fill,
                     )),
                   )),
-
+              Positioned(
+                left: 25,
+                top: 280, // ListView의 시작 위치
+                child: SizedBox(
+                  width: containerWidth * 0.87,
+                  height: 330,
+                  child: SingleChildScrollView(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: testQ.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Container(
+                              height: 140,
+                              width: containerWidth * 0.87,
+                              decoration: ShapeDecoration(
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      width: 2, color: Color(0xFFE9DCC3)),
+                                  borderRadius: BorderRadius.circular(16.27),
+                                ),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      left: 40,
+                                      top: 20,
+                                      child: Container(
+                                          width: 300,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Flexible(
+                                                  child: RichText(
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 5,
+                                                strutStyle:
+                                                    StrutStyle(fontSize: 16.0),
+                                                text: TextSpan(
+                                                    text: 'Q: ${testQ[index]}',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      height: 1.4,
+                                                      fontSize: 16.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
+                                              )),
+                                            ],
+                                          ))),
+                                  Positioned(
+                                      left: 80,
+                                      top: 70,
+                                      child: Container(
+                                          width: 280,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Flexible(
+                                                  child: RichText(
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 5,
+                                                strutStyle:
+                                                    StrutStyle(fontSize: 14.0),
+                                                text: TextSpan(
+                                                    text: 'A: ${testA[index]}',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      height: 1.4,
+                                                      fontSize: 14.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
+                                              )),
+                                            ],
+                                          ))),
+                                  Positioned(
+                                    right: 20,
+                                    bottom: 10,
+                                    child: Text(
+                                      '-${testName[index]} 약사 답변-',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
               Positioned(
                   left: 55,
                   top: 595,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      onQuestionButtonPressed(context);
+                    },
                     child: Container(
                       width: 306,
                       height: 43,

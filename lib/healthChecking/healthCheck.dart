@@ -108,11 +108,11 @@ class _checkPageState extends State<checkPage> {
 
               // logo
               Positioned(
-                left: containerWidth * 0.2,
-                top: 35,
+                left: containerWidth * 0.05,
+                top: 16,
                 child: Container(
-                  width: 222 * 1.1,
-                  height: 49 * 1.1,
+                  width: 222 * 1.6,
+                  height: 49 * 1.6,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/logo.png"),

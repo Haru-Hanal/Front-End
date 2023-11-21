@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../bottom.dart' as bottom;
+import '../information.dart' as info;
 
 class HealthPage extends StatefulWidget {
   @override
@@ -105,11 +106,11 @@ class _HealthPage extends State<HealthPage> {
 
               // logo
               Positioned(
-                left: containerWidth * 0.2,
-                top: 35,
+                left: containerWidth * 0.05,
+                top: 16,
                 child: Container(
-                  width: 222 * 1.1,
-                  height: 49 * 1.1,
+                  width: 222 * 1.6,
+                  height: 49 * 1.6,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/logo.png"),
@@ -231,64 +232,29 @@ class _HealthPage extends State<HealthPage> {
               ),
 
               Positioned(
-                left: 21.14,
-                top: 173.29,
-                child: GestureDetector(
-                  onTap: () {
-                    // 공백 클릭 이벤트 처리 로직을 구현하세요.
-                  },
+                  left: 50.50,
+                  top: 235.04,
                   child: Container(
-                    width: containerWidth * 0.88,
-                    height: 65.54,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          left: 10,
-                          top: 15,
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage("assets/health.png"),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 55.50,
-                          top: 35.04,
-                          child: SizedBox(
-                            width: 166.68,
-                            child: Text(
-                              '나의 건강상태',
-                              style: TextStyle(
-                                color: Color(0xFF151921),
-                                fontSize: 14.38,
-                                fontFamily: 'Lato',
-                                fontWeight: FontWeight.w400,
-                                height: 0.12,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          left: 0,
-                          top: 60,
-                          right: 0,
-                          child: Container(
-                            height: 1,
-                            color: Color.fromARGB(128, 176, 173, 173),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                      width: 300,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Flexible(
+                              child: RichText(
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 20,
+                            strutStyle: StrutStyle(fontSize: 16.0),
+                            text: TextSpan(
+                                text: info.total,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  height: 1.4,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          )),
+                        ],
+                      ))),
 
               // 하단 버튼
               Positioned(left: 0, top: 645, child: bottom.bottomPage()),

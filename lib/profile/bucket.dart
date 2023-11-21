@@ -6,6 +6,19 @@ class BucketPage extends StatefulWidget {
   _BucketPage createState() => _BucketPage();
 }
 
+List<int> _selectedValue = [1, 2, 4, 3, 1];
+List<String> testNames = ['테스트1', '테스트2', '테스트3', '테스트4', '테스트5'];
+List<String> testIngredients = [
+  '재료1',
+  '재료2',
+  '재료3',
+  '재료4',
+  '재료5',
+];
+List<String> testPrices = ['1000', '2000', '3000', '4000', '5000'];
+List<bool> _checkboxValues = [false, false, false, false, false];
+bool isChecked = false;
+
 class _BucketPage extends State<BucketPage> {
   //생성자 부분 쪽에서 서버에 데이터를 요청한다. 이때 text 카테고리에 대한 정보를 받아온다? 이렇게 작성하면 될듯.
   @override
@@ -15,22 +28,49 @@ class _BucketPage extends State<BucketPage> {
 
     final double containerHeight = screenHeight;
     final double containerWidth = screenWidth;
-    List<String> testNames = [
-      'name1',
-      'name2',
-      'name3',
-    ];
-    List<String> testIngredients = [
-      'gredient1',
-      'gredient2',
-      'gredient3',
-    ];
-    List<String> testPrices = [
-      'price1',
-      'price2',
-      'price3',
-    ];
-    List<int> selectedNumber = []; // 선택된 숫자를 저장할 변수
+
+    void _openSelectionScreen(int index) async {
+      int newValue = await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('선택창'),
+            content: Container(
+              width: 200.0,
+              height: 300.0,
+              child: ListView.builder(
+                itemCount: 10,
+                itemBuilder: (context, selectedIndex) {
+                  final value = selectedIndex + 1;
+                  return ListTile(
+                    title: Text('$value'),
+                    onTap: () {
+                      Navigator.pop(context, value);
+                    },
+                    selected: _selectedValue[index] == value,
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      );
+
+      if (true) {
+        setState(() {
+          _selectedValue[index] = newValue;
+        });
+      }
+      print('asdfasdf${_selectedValue}');
+    }
+
+    void _toggleCheckboxValue(int index, bool value) {
+      setState(() {
+        _checkboxValues[index] = value;
+      });
+      print('asdfasdf${_checkboxValues}');
+    }
+
     return Column(
       children: [
         // 배경
@@ -120,11 +160,11 @@ class _BucketPage extends State<BucketPage> {
 
               // logo
               Positioned(
-                left: containerWidth * 0.2,
-                top: 35,
+                left: containerWidth * 0.05,
+                top: 16,
                 child: Container(
-                  width: 222 * 1.1,
-                  height: 49 * 1.1,
+                  width: 222 * 1.6,
+                  height: 49 * 1.6,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/logo.png"),
@@ -265,69 +305,124 @@ class _BucketPage extends State<BucketPage> {
                   width: containerWidth * 0.87,
                   height: 300, // ListView의 높이 조정
                   child: SingleChildScrollView(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: testNames.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            Container(
-                              height: 100, // 박스의 높이
-                              width: containerWidth * 0.87, // 박스의 너비
-                              decoration: ShapeDecoration(
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      width: 2, color: Color(0xFFEFEDE9)),
-                                  borderRadius: BorderRadius.circular(24.40),
+                    child: Column(
+                      children: [
+                        if (testNames.isNotEmpty)
+                          ...List.generate(testNames.length, (index) {
+                            return Column(
+                              children: [
+                                Container(
+                                  height: 140,
+                                  width: containerWidth * 0.87,
+                                  decoration: ShapeDecoration(
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          width: 2, color: Color(0xFFEFEDE9)),
+                                      borderRadius:
+                                          BorderRadius.circular(24.40),
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                        left: 140,
+                                        top: 10,
+                                        child: Text(
+                                          testNames[index],
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        left: 140,
+                                        top: 30,
+                                        child: Text(
+                                          testIngredients[index],
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 22,
+                                        bottom: 10,
+                                        child: Text(
+                                          '₩ ' + testPrices[index],
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 100,
+                                        left: 50,
+                                        child: Container(
+                                          width: 79,
+                                          height: 24.10,
+                                          decoration: BoxDecoration(
+                                            color: Color(
+                                                0xFFF6FEF9), // 버튼의 배경색을 원하는 색상으로 변경
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            // 버튼의 모서리를 둥글게 설정
+                                          ),
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors
+                                                  .transparent, // 버튼의 배경색을 투명으로 설정
+                                              elevation: 0, // 버튼의 그림자를 제거
+                                            ),
+                                            onPressed: () =>
+                                                _openSelectionScreen(index),
+                                            child: SizedBox(
+                                              width: 65.0, // 버튼의 너비를 지정합니다
+                                              height: 15.0, // 버튼의 높이를 지정합니다
+                                              child: Center(
+                                                child: Text(
+                                                  '${_selectedValue[index]}',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF151921),
+                                                    fontSize: 14,
+                                                    fontFamily: 'Lato',
+                                                    fontWeight: FontWeight.w800,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 40,
+                                        left: 3,
+                                        child: Material(
+                                          color: Color.fromARGB(
+                                              252, 251, 250, 243),
+                                          child: Checkbox(
+                                            value: _checkboxValues[index],
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                _checkboxValues[index] =
+                                                    value ?? false;
+                                                print("asdf${_checkboxValues}");
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: 120,
-                                    top: 10,
-                                    child: Text(
-                                      testNames[index], // testNames[index] 출력
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    left: 120,
-                                    top: 30,
-                                    child: Text(
-                                      testIngredients[
-                                          index], // testIngredient[index] 출력
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 22,
-                                    bottom: 10,
-                                    child: Text(
-                                      '₩ ' +
-                                          testPrices[
-                                              index], // testPrices[index] 출력
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10), // 간격 추가
-                          ],
-                        );
-                      },
+                                SizedBox(height: 10),
+                              ],
+                            );
+                          }),
+                      ],
                     ),
                   ),
                 ),
@@ -336,7 +431,73 @@ class _BucketPage extends State<BucketPage> {
                   left: 55,
                   top: 595,
                   child: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          int totalCount = 0;
+                          int totalPrice = 0;
+                          List<String> selectedProducts = [];
+                          for (int i = 0; i < _checkboxValues.length; i++) {
+                            if (_checkboxValues[i]) {
+                              totalCount += _selectedValue[i];
+                              totalPrice +=
+                                  _selectedValue[i] * int.parse(testPrices[i]);
+                              selectedProducts.add(
+                                  '${testNames[i]}: ${_selectedValue[i]}개');
+                            }
+                          }
+                          return AlertDialog(
+                            title: Text('주문 정보'),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('선택된 상품:'),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: selectedProducts
+                                      .map((product) => Text(product))
+                                      .toList(),
+                                ),
+                                SizedBox(height: 10),
+                                Text('총 개수: $totalCount'),
+                                Text('최종 금액: $totalPrice 원'),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('취소'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: Text('주문 완료'),
+                                      content: Text('주문이 완료되었습니다.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('확인'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: Text('주문하기'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
                     child: Container(
                       width: 306,
                       height: 43,

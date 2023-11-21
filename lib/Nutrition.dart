@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'search_input.dart' as search;
-import 'menu.dart' as menu;
-import 'bottom.dart' as bottom;
+import '../bottom.dart' as bottom;
 import 'data/Lactobacilli.dart' as Lactobacilli;
 import 'data/Lutein.dart' as Lutein;
 import 'data/milk.dart' as milk;
@@ -10,11 +7,14 @@ import 'data/Minerals.dart' as Minerals;
 import 'data/Omega.dart' as Omega;
 import 'data/Vitamin.dart' as Vitamin;
 import 'package:path/path.dart' as path;
+import 'information.dart' as info;
 
-class LayoutPage extends StatelessWidget {
-  final String text;
+class nutritionPage extends StatefulWidget {
+  @override
+  _nutritionPage createState() => _nutritionPage();
+}
 
-  LayoutPage({required this.text});
+class _nutritionPage extends State<nutritionPage> {
   //생성자 부분 쪽에서 서버에 데이터를 요청한다. 이때 text 카테고리에 대한 정보를 받아온다? 이렇게 작성하면 될듯.
   @override
   Widget build(BuildContext context) {
@@ -23,51 +23,52 @@ class LayoutPage extends StatelessWidget {
 
     final double containerHeight = screenHeight;
     final double containerWidth = screenWidth;
-    String filePath = path.join('data', text);
-
     List<String> testNames = [];
     List<String> testIngredients = [];
     List<String> testPrices = [];
-    switch (text) {
-      case 'Lutein':
-        testNames = Lutein.Names;
-        testIngredients = Lutein.Ingredients;
-        testPrices = Lutein.Prices;
-        break;
-      case 'milk':
-        // text가 '2'일 때 실행할 코드 작성
-        testNames = milk.Names;
-        testIngredients = milk.Ingredients;
-        testPrices = milk.Prices;
-        break;
-      case 'Minerals':
-        // text가 '3'일 때 실행할 코드 작성
-        testNames = Minerals.Names;
-        testIngredients = Minerals.Ingredients;
-        testPrices = Minerals.Prices;
-        break;
-      case 'Omega':
-        // text가 '4'일 때 실행할 코드 작성
-        testNames = Omega.Names;
-        testIngredients = Omega.Ingredients;
-        testPrices = Omega.Prices;
-        break;
-      case 'Vitamin':
-        // text가 '5'일 때 실행할 코드 작성
-        testNames = Vitamin.Names;
-        testIngredients = Vitamin.Ingredients;
-        testPrices = Vitamin.Prices;
-        break;
-      case 'Lactobacilli':
-        // text가 '6'일 때 실행할 코드 작성
-        testNames = Lactobacilli.Names;
-        testIngredients = Lactobacilli.Ingredients;
-        testPrices = Lactobacilli.Prices;
-        break;
-      default:
-        // text가 1부터 6까지의 값이 아닐 때 실행할 코드 작성
-        print('text는 1부터 6까지의 값이 아닙니다.');
-        break;
+    List<String> text = [];
+    String mainText = '';
+    if (info.total.contains('루테인')) {
+      testNames.addAll(Lutein.Names);
+      testIngredients.addAll(Lutein.Ingredients);
+      testPrices.addAll(Lutein.Prices);
+      text.addAll(['Lutein', 'Lutein', 'Lutein']);
+      mainText = mainText + ' 루테인';
+    }
+    if (info.total.contains('밀크')) {
+      testNames.addAll(milk.Names);
+      testIngredients.addAll(milk.Ingredients);
+      testPrices.addAll(milk.Prices);
+      text.addAll(['milk', 'milk', 'milk']);
+      mainText = mainText + ' 밀크씨슬';
+    }
+    if (info.total.contains('미네랄')) {
+      testNames.addAll(Minerals.Names);
+      testIngredients.addAll(Minerals.Ingredients);
+      testPrices.addAll(Minerals.Prices);
+      text.addAll(['Minerals', 'Minerals', 'Minerals']);
+      mainText = mainText + ' 미네랄';
+    }
+    if (info.total.contains('오메가')) {
+      testNames.addAll(Omega.Names);
+      testIngredients.addAll(Omega.Ingredients);
+      testPrices.addAll(Omega.Prices);
+      text.addAll(['Omega', 'Omega', 'Omega']);
+      mainText = mainText + ' 오메가3';
+    }
+    if (info.total.contains('비타민')) {
+      testNames.addAll(Vitamin.Names);
+      testIngredients.addAll(Vitamin.Ingredients);
+      testPrices.addAll(Vitamin.Prices);
+      text.addAll(['Vitamin', 'Vitamin', 'Vitamin']);
+      mainText = mainText + ' 바타민';
+    }
+    if (info.total.contains('유산균')) {
+      testNames.addAll(Lactobacilli.Names);
+      testIngredients.addAll(Lactobacilli.Ingredients);
+      testPrices.addAll(Lactobacilli.Prices);
+      text.addAll(['Lactobacilli', 'Lactobacilli', 'Lactobacilli']);
+      mainText = mainText + ' 유산균';
     }
 
     return Column(
@@ -156,7 +157,6 @@ class LayoutPage extends StatelessWidget {
                 ),
               ),
               //입력창
-              search.HgihSearch(),
 
               // logo
               Positioned(
@@ -174,21 +174,18 @@ class LayoutPage extends StatelessWidget {
                 ),
               ),
               Positioned(
-                left: containerWidth * 0.06,
-                top: 176,
+                left: 50,
+                top: 140,
                 child: Text(
-                  '-' + text + "-",
-                  textAlign: TextAlign.center,
+                  '사용자님에게 ' + mainText + ' 추천',
                   style: TextStyle(
-                    color: Color(0xFF151921),
+                    color: Colors.black,
                     fontSize: 20,
-                    fontFamily: 'Be Vietnam Pro',
-                    fontWeight: FontWeight.w600,
-                    height: 0.09,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-
+              //상단?
               Positioned(
                 left: 25,
                 top: 180, // ListView의 시작 위치
@@ -244,7 +241,7 @@ class LayoutPage extends StatelessWidget {
                                     child: ElevatedButton(
                                       onPressed: () {},
                                       child: Image.asset(
-                                        'assets/Nutritional/${text}/${testNames[index]}.png',
+                                        'assets/Nutritional/${text[index]}/${testNames[index]}.png',
                                         width: 90,
                                         height: 90,
                                       ),
@@ -296,7 +293,6 @@ class LayoutPage extends StatelessWidget {
                   ),
                 ),
               ),
-
               // 하단 버튼
               Positioned(left: 0, top: 645, child: bottom.bottomPage()),
             ],

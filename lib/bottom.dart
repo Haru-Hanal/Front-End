@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'NoSubscribe.dart' as Nosub;
 import 'subscribe.dart' as sub;
 import 'menu.dart' as menu;
+import 'sample_screen.dart' as sample;
 
-bool subcribe = false;
+bool subcribe = sample.subscribe == 1 ? true : false;
 
 class bottomPage extends StatelessWidget {
   @override

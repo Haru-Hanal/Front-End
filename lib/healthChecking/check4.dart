@@ -6,6 +6,8 @@ import '../information.dart' as info;
 import '../menu.dart' as menu;
 import 'apiRequest.dart';
 import '../bottom.dart' as bottom;
+import '../apiRequest.dart' as api;
+import '../sample_screen.dart' as sample;
 
 class checkPage extends StatefulWidget {
   @override
@@ -22,7 +24,7 @@ class _checkPageState extends State<checkPage> {
       '이다.' +
       '평균적인 운동량 : ' +
       info.activity +
-      '이다.';
+      '이다. 루테인, 유산균, 밀크씨슬, 미네랄, 오메가3, 비타민 중에서 2개 정도 추가로 추천해줘';
   //생성자 부분 쪽에서 서버에 데이터를 요청한다. 이때 text 카테고리에 대한 정보를 받아온다? 이렇게 작성하면 될듯.
   @override
   Widget build(BuildContext context) {
@@ -140,11 +142,11 @@ class _checkPageState extends State<checkPage> {
 
               // logo
               Positioned(
-                left: containerWidth * 0.2,
-                top: 35,
+                left: containerWidth * 0.05,
+                top: 16,
                 child: Container(
-                  width: 222 * 1.1,
-                  height: 49 * 1.1,
+                  width: 222 * 1.6,
+                  height: 49 * 1.6,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("assets/logo.png"),
@@ -154,21 +156,6 @@ class _checkPageState extends State<checkPage> {
                 ),
               ),
 
-              // logo
-              Positioned(
-                left: containerWidth * 0.2,
-                top: 35,
-                child: Container(
-                  width: 222 * 1.1,
-                  height: 49 * 1.1,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/logo.png"),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ),
-              ),
               Positioned(
                 top: 240,
                 left: 50,
@@ -210,6 +197,7 @@ class _checkPageState extends State<checkPage> {
                 top: 560,
                 child: GestureDetector(
                   onTap: () {
+                    api.updateUserCondition(sample.userid, info.total);
                     Navigator.popUntil(context, ModalRoute.withName('/'));
                   },
                   child: Container(
